@@ -8,6 +8,7 @@ import MetricsModal from './components/MetricsModal'
 import HintModal from './components/HintModal'
 import ScoreCard from './components/ScoreCard'
 import HistoryModal from './components/HistoryModal'
+import LoadingSpinner from './components/LoadingSpinner'
 
 interface MathProblem {
   problem_text: string
@@ -207,6 +208,18 @@ export default function Home() {
     }
   }
 
+  // Show loading spinner when transitioning between questions
+  if (isLoading && !problem) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="large" color="#4f46e5" />
+          <p className="mt-4 text-gray-600 font-medium">Generating your next question...</p>
+        </div>
+      </div>
+    )
+  }
+
   // Render appropriate screen based on state
   if (!problem && !feedback) {
     return (
@@ -254,7 +267,17 @@ export default function Home() {
   if (problem) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto relative">
+          {/* Loading overlay when submitting answer */}
+          {isLoading && feedback && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-lg">
+              <div className="text-center bg-white p-6 rounded-lg shadow-lg">
+                <LoadingSpinner size="large" color="#4f46e5" />
+                <p className="mt-4 text-gray-600 font-medium">Checking your answer...</p>
+              </div>
+            </div>
+          )}
+
           {/* Question Screen */}
           <QuestionScreen
             questionNumber={questionNumber}

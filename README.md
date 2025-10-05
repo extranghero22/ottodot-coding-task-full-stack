@@ -142,10 +142,6 @@ When submitting your assessment, provide:
 
 So here's what I built! 🚀
 
-**The Basics:**
-- Got Google Gemini AI hooked up to generate actual Primary 5 math problems - no more boring textbook stuff! The AI creates realistic scenarios that kids can actually relate to
-- Made three difficulty levels (Easy/Medium/Hard) that actually make sense - Easy problems are like "Sarah has 5 apples" while Hard ones get into some serious multi-step thinking
-- Set up Supabase to store everything properly - sessions, answers, the whole shebang
 
 **The Timer That Actually Looks Cool:**
 - Built this circular timer using SVG that changes colors as time runs out (green → yellow → red). Way better than boring numbers!
