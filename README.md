@@ -139,49 +139,12 @@ When submitting your assessment, provide:
 *Please fill in this section with any important notes about your implementation, design decisions, challenges faced, or features you're particularly proud of.*
 
 ### My Implementation:
-
-**🎯 Core Features Implemented:**
-
-- **AI-Powered Problem Generation**: Integrated Google Gemini AI to generate contextually appropriate Primary 5 math problems with realistic scenarios and proper difficulty scaling
-- **Dynamic Difficulty System**: Implemented three-tier difficulty (Easy/Medium/Hard) with corresponding time limits and problem complexity
-- **Comprehensive Database Schema**: Created robust Supabase tables for sessions, submissions, and user tracking with proper relationships
-
-**⏱️ Advanced Timer Implementation:**
-- **Circular Timer Visualization**: Built a custom SVG-based circular timer with dynamic color coding (green → yellow → red) based on time remaining
-- **Difficulty-Based Timing**: Easy (30s), Medium (60s), Hard (120s) with smooth animations and visual feedback
-- **Conditional Timer Display**: Timer only appears when enabled in settings, with clean toggle functionality
-- **Manual Progression Control**: Timer stops at zero but requires user interaction to proceed, preventing automatic question advancement
-
-**🔐 User Identity & Data Persistence:**
-- **localStorage-Based User Management**: Implemented automatic user ID generation and persistence using `crypto.randomUUID()`
-- **Session Continuity**: User sessions persist across browser refreshes and maintain problem history
-- **Privacy-Focused**: No personal data collection - only anonymous user IDs for problem tracking
-- **Cross-Session Analytics**: Users can view their complete problem history and performance metrics
-
-**📱 Mobile-First Responsive Design:**
-- **Fluid Typography**: Used `clamp()` functions for responsive font sizes that scale smoothly across devices
-- **Adaptive Layouts**: Implemented flexible grid systems with `repeat(auto-fit, minmax())` for optimal space utilization
-- **Touch-Optimized Interface**: Large touch targets and intuitive gestures for mobile users
-- **Viewport Optimization**: Proper meta tags and responsive breakpoints for all screen sizes
-
-**🎨 Enhanced User Experience:**
-- **Modal-Based Architecture**: Clean modal system for Settings, Metrics, History, and Hints to reduce UI clutter
-- **Smart Answer Feedback**: A/B/C/D labeled buttons with color-coded feedback (blue for selected, red for wrong, green for correct)
-- **Detailed History Analysis**: Clickable problem cards showing full problem breakdown, user answers, and correct solutions
-- **Hint System**: Progressive hint revelation with "Show Hint" button to prevent accidental spoilers
-- **Performance Metrics**: Comprehensive statistics dashboard showing accuracy, time spent, and difficulty progression
-
-**🛠️ Technical Architecture:**
-- **TypeScript Throughout**: Full type safety with proper interfaces and error handling
-- **API Route Optimization**: Dynamic rendering configuration for all API endpoints to prevent static generation issues
-- **Error Handling**: Comprehensive error boundaries and user-friendly error messages
-- **Code Organization**: Modular component structure with clear separation of concerns
-- **Build Optimization**: Proper .gitignore configuration and build process optimization for deployment
-
-**🚀 Deployment Ready:**
-- **Vercel-Optimized**: Fixed all build errors including viewport metadata and dynamic rendering issues
-- **Environment Configuration**: Proper environment variable handling for Supabase and Google AI integration
-- **Favicon Implementation**: Custom abacus-themed favicon in both SVG and ICO formats for cross-browser compatibility
+- Made a timer for time-based challengers
+- Implemented automatic user ID generation and persistence using `crypto.randomUUID()` no personal info is saved 
+- Mobile first approach 
+- Problems on History modal can be clicked for detailed view
+- Took a design insipiration on Kahoots!
+- Minimalist design as  i am a minimalist at heart
 
 ## Additional Features (Optional)
 
