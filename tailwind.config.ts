@@ -8,6 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        'kahoot-red': '#e21b3c',
+        'kahoot-blue': '#1368ce',
+        'kahoot-yellow': '#ffa602',
+        'kahoot-green': '#26890c',
+        'kahoot-purple': '#46178f',
+        'kahoot-pink': '#ee3a8c',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

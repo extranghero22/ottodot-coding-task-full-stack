@@ -1,93 +1,331 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import StartScreen from './components/StartScreen'
+import QuestionScreen from './components/QuestionScreen'
+import SettingsModal from './components/SettingsModal'
+import MetricsModal from './components/MetricsModal'
+import HintModal from './components/HintModal'
+import ScoreCard from './components/ScoreCard'
+import HistoryModal from './components/HistoryModal'
 
 interface MathProblem {
   problem_text: string
   final_answer: number
+  options: Array<{text: string, value: number}>
+  difficulty?: string
+  topic?: string
+  hint?: string
 }
 
 export default function Home() {
   const [problem, setProblem] = useState<MathProblem | null>(null)
-  const [userAnswer, setUserAnswer] = useState('')
   const [feedback, setFeedback] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
+  const [questionNumber, setQuestionNumber] = useState(1)
+  const [answerCount, setAnswerCount] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
 
+  // New state for optional features
+  const [difficulty, setDifficulty] = useState('medium')
+  const [topic, setTopic] = useState<string | null>(null)
+  const [totalCorrect, setTotalCorrect] = useState(0)
+  const [totalIncorrect, setTotalIncorrect] = useState(0)
+  const [totalHintsUsed, setTotalHintsUsed] = useState(0)
+  const [hintUsedCurrentQuestion, setHintUsedCurrentQuestion] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [showMetricsModal, setShowMetricsModal] = useState(false)
+  const [showHintModal, setShowHintModal] = useState(false)
+  const [timerEnabled, setTimerEnabled] = useState(false)
+  const [timeSpent, setTimeSpent] = useState(0)
+  const [timeRemaining, setTimeRemaining] = useState(60)
+  const [userId, setUserId] = useState<string | null>(null)
+
+  // Initialize or retrieve user ID from localStorage
+  useEffect(() => {
+    const getUserId = () => {
+      const storedUserId = localStorage.getItem('math_app_user_id')
+
+      if (storedUserId) {
+        setUserId(storedUserId)
+      } else {
+        // Generate new unique user ID
+        const newUserId = crypto.randomUUID()
+        localStorage.setItem('math_app_user_id', newUserId)
+        setUserId(newUserId)
+      }
+    }
+
+    getUserId()
+  }, [])
+
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    
+    if (timerEnabled && timeRemaining > 0 && !feedback) {
+      interval = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            // Just stop the timer, don't auto-proceed to next question
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [timerEnabled, timeRemaining, feedback])
+
+  // Reset timer when new question starts
+  useEffect(() => {
+    if (problem && timerEnabled) {
+      const totalTime = problem.difficulty === 'easy' ? 60 : problem.difficulty === 'medium' ? 90 : 120
+      setTimeRemaining(totalTime)
+    }
+  }, [problem, timerEnabled])
   const generateProblem = async () => {
-    // TODO: Implement problem generation logic
-    // This should call your API route to generate a new problem
-    // and save it to the database
+    setIsLoading(true)
+    setFeedback('')
+    setIsCorrect(null)
+    setHintUsedCurrentQuestion(false)
+    setTimeSpent(0)
+
+    try {
+      const response = await fetch('/api/generate-problem', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          difficulty,
+          topic,
+          user_id: userId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate problem')
+      }
+
+      const data = await response.json()
+      setProblem({
+        problem_text: data.problem_text,
+        final_answer: data.final_answer,
+        options: data.options,
+        difficulty: data.difficulty,
+        topic: data.topic,
+        hint: data.hint
+      })
+      setSessionId(data.session_id)
+    } catch (error) {
+      console.error('Error generating problem:', error)
+      setFeedback('Failed to generate a problem. Please try again.')
+      setIsCorrect(false)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const submitAnswer = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Implement answer submission logic
-    // This should call your API route to check the answer,
-    // save the submission, and generate feedback
+  const submitAnswer = async (answerValue: number) => {
+    if (!sessionId) {
+      setFeedback('Please generate a problem first.')
+      return
+    }
+
+    setIsLoading(true)
+    setAnswerCount(prev => prev + 1)
+    setSelectedAnswer(answerValue)
+
+    try {
+      const response = await fetch('/api/submit-answer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          user_answer: answerValue,
+          time_spent_seconds: timeSpent,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit answer')
+      }
+
+      const data = await response.json()
+      setFeedback(data.feedback)
+      setIsCorrect(data.is_correct)
+
+      // Update score tracking
+      if (data.is_correct) {
+        setTotalCorrect(prev => prev + 1)
+      } else {
+        setTotalIncorrect(prev => prev + 1)
+      }
+    } catch (error) {
+      console.error('Error submitting answer:', error)
+      setFeedback('Failed to submit your answer. Please try again.')
+      setIsCorrect(false)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Math Problem Generator
-        </h1>
-        
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <button
-            onClick={generateProblem}
-            disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105"
-          >
-            {isLoading ? 'Generating...' : 'Generate New Problem'}
-          </button>
+  const handleNextQuestion = () => {
+    setQuestionNumber(prev => prev + 1)
+    setSelectedAnswer(null)
+    setHintUsedCurrentQuestion(false)
+    generateProblem()
+  }
+
+  const handleHintUsed = () => {
+    if (!hintUsedCurrentQuestion) {
+      setTotalHintsUsed(prev => prev + 1)
+      setHintUsedCurrentQuestion(true)
+    }
+  }
+
+  const handleTimeUp = () => {
+    if (!feedback && problem) {
+      // Auto-submit with a wrong answer when time runs out
+      setFeedback('Time is up! The question will move to the next one.')
+      setIsCorrect(false)
+      setTotalIncorrect(prev => prev + 1)
+
+      // Auto move to next question after 2 seconds
+      setTimeout(() => {
+        handleNextQuestion()
+      }, 2000)
+    }
+  }
+
+  // Render appropriate screen based on state
+  if (!problem && !feedback) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Score Card - Only show if user has attempted problems */}
+          {(totalCorrect + totalIncorrect) > 0 && (
+            <ScoreCard
+              totalQuestions={totalCorrect + totalIncorrect}
+              correctAnswers={totalCorrect}
+              incorrectAnswers={totalIncorrect}
+              hintsUsed={totalHintsUsed}
+            />
+          )}
+
+          {/* Start Screen */}
+          <StartScreen 
+            onStart={generateProblem} 
+            isLoading={isLoading} 
+            onSettingsClick={() => setShowSettingsModal(true)}
+          />
+
+          {/* History Modal */}
+          <HistoryModal
+            isOpen={showHistory}
+            onClose={() => setShowHistory(false)}
+          />
+
+          {/* Settings Modal */}
+          <SettingsModal
+            isOpen={showSettingsModal}
+            onClose={() => setShowSettingsModal(false)}
+            difficulty={difficulty}
+            topic={topic}
+            timerEnabled={timerEnabled}
+            onDifficultyChange={setDifficulty}
+            onTopicChange={setTopic}
+            onTimerToggle={setTimerEnabled}
+          />
         </div>
+      </div>
+    )
+  }
 
-        {problem && (
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Problem:</h2>
-            <p className="text-lg text-gray-800 leading-relaxed mb-6">
-              {problem.problem_text}
-            </p>
-            
-            <form onSubmit={submitAnswer} className="space-y-4">
-              <div>
-                <label htmlFor="answer" className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Answer:
-                </label>
-                <input
-                  type="number"
-                  id="answer"
-                  value={userAnswer}
-                  onChange={(e) => setUserAnswer(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your answer"
-                  required
-                />
-              </div>
-              
-              <button
-                type="submit"
-                disabled={!userAnswer || isLoading}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105"
-              >
-                Submit Answer
-              </button>
-            </form>
-          </div>
-        )}
+  if (problem) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Question Screen */}
+          <QuestionScreen
+            questionNumber={questionNumber}
+            answerCount={answerCount}
+            problemText={problem.problem_text}
+            options={problem.options}
+            onAnswer={submitAnswer}
+            isLoading={isLoading}
+            showResult={!!feedback}
+            isCorrect={isCorrect}
+            feedback={feedback}
+            onNext={handleNextQuestion}
+            selectedAnswer={selectedAnswer}
+            correctAnswer={problem.final_answer}
+            onMetricsClick={() => setShowMetricsModal(true)}
+            onHistoryClick={() => setShowHistory(true)}
+            onHintClick={() => setShowHintModal(true)}
+            hint={problem.hint}
+            timeRemaining={timeRemaining}
+            totalTime={problem.difficulty === 'easy' ? 60 : problem.difficulty === 'medium' ? 90 : 120}
+            timerEnabled={timerEnabled}
+          />
 
-        {feedback && (
-          <div className={`rounded-lg shadow-lg p-6 ${isCorrect ? 'bg-green-50 border-2 border-green-200' : 'bg-yellow-50 border-2 border-yellow-200'}`}>
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">
-              {isCorrect ? '✅ Correct!' : '❌ Not quite right'}
-            </h2>
-            <p className="text-gray-800 leading-relaxed">{feedback}</p>
+          {/* Topic and Difficulty Display */}
+          <div className="mt-4 flex gap-2 justify-center flex-wrap">
+            {problem.difficulty && (
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                problem.difficulty === 'easy'
+                  ? 'bg-green-100 text-green-800'
+                  : problem.difficulty === 'medium'
+                  ? 'bg-yellow-100 text-yellow-800'
+                  : 'bg-red-100 text-red-800'
+              }`}>
+                {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+              </span>
+            )}
+            {problem.topic && (
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {problem.topic}
+              </span>
+            )}
           </div>
-        )}
-      </main>
-    </div>
-  )
+
+          {/* History Modal */}
+          <HistoryModal
+            isOpen={showHistory}
+            onClose={() => setShowHistory(false)}
+          />
+
+          {/* Metrics Modal */}
+          <MetricsModal
+            isOpen={showMetricsModal}
+            onClose={() => setShowMetricsModal(false)}
+            totalQuestions={totalCorrect + totalIncorrect}
+            correctAnswers={totalCorrect}
+            incorrectAnswers={totalIncorrect}
+            hintsUsed={totalHintsUsed}
+          />
+
+          {/* Hint Modal */}
+          <HintModal
+            isOpen={showHintModal}
+            onClose={() => setShowHintModal(false)}
+            hint={problem.hint}
+            onHintUsed={handleHintUsed}
+            disabled={isLoading || hintUsedCurrentQuestion}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  return null
 }
