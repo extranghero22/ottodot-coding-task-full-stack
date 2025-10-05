@@ -125,7 +125,6 @@ export default function SettingsModal({
                     borderRadius: '6px',
                     fontWeight: '500',
                     fontSize: 'clamp(0.8rem, 3.5vw, 0.875rem)',
-                    border: 'none',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     backgroundColor: difficulty === level ? '#ffffff' : '#333333',

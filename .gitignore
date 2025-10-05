@@ -8,6 +8,7 @@ package-lock.json
 # Next.js build output
 .next/
 out/
+.next/
 
 # Environment variables
 .env.local
