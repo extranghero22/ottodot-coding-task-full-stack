@@ -140,43 +140,13 @@ When submitting your assessment, provide:
 
 So here's what I built! 🚀
 
-
-**The Timer That Actually Looks Cool:**
-- Built this circular timer using SVG that changes colors as time runs out (green → yellow → red). Way better than boring numbers!
-- Easy gets 30 seconds, Medium gets 1 minute, Hard gets 2 minutes - feels right for each level
-- Timer only shows up when you want it (there's a toggle in settings)
-- When time hits zero, it stops but doesn't auto-advance - you gotta click to move on (hate when apps rush you!)
-
-**User Stuff (The localStorage Magic):**
-- Used `crypto.randomUUID()` to give each user a unique ID that sticks around in localStorage
-- Your progress saves even if you close the browser and come back later - no more losing your streak!
-- No personal info collected, just anonymous IDs so we can track your math journey
-- You can see your entire problem history and how you're improving over time
-
-**Mobile-First Because That's How People Actually Use Apps:**
-- Used `clamp()` for fonts so everything scales nicely from phone to desktop
-- Made grids that adapt to any screen size with `repeat(auto-fit, minmax())` - looks good everywhere
-- Big touch targets and smooth interactions for mobile users
-- Proper viewport setup so it actually works on phones
-
-**Making It Actually Fun to Use:**
-- Put everything in modals so the main screen isn't cluttered - Settings, History, Metrics all pop up cleanly
-- Answer buttons are A/B/C/D with colors that make sense (blue when you pick, red if wrong, green if right)
-- You can click on any old problem in your history to see the full breakdown - super helpful for learning
-- Hints don't spoil everything - you gotta click "Show Hint" to see them
-- Stats dashboard shows your accuracy and time spent - gamification without being annoying
-
-**Technical Stuff That Actually Works:**
-- Went full TypeScript because I hate runtime errors
-- Made all API routes dynamic so they don't break on Vercel (learned that the hard way!)
-- Proper error handling so users get helpful messages instead of cryptic errors
-- Organized code into logical components - no spaghetti code here
-- Fixed all the build issues so it actually deploys without breaking
-
-**Ready to Ship:**
-- Fixed all the Vercel deployment issues (viewport metadata, dynamic rendering, etc.)
-- Environment variables set up properly for Supabase and Google AI
-- Custom abacus favicon because why not make it look professional? 🧮
+- Made a timer for time-based challengers
+- Implemented automatic user ID generation and persistence using `crypto.randomUUID()` no personal 
+info is saved 
+- Mobile first approach 
+- Problems on History modal can be clicked for detailed view
+- Took a design insipiration on Kahoots!
+- Minimalist design as  i am a minimalist at heart
 
 ## Additional Features (Optional)
 
