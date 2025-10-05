@@ -32,117 +32,36 @@ export default function HintModal({
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      padding: '1rem',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
-      <div style={{
-        backgroundColor: '#1a1a1a',
-        borderRadius: '0.75rem',
-        padding: '2rem',
-        maxWidth: '500px',
-        width: '100%',
-        border: '1px solid #333333',
-        position: 'relative'
-      }}>
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-gray-800 rounded-xl p-6 md:p-8 max-w-lg w-full border border-gray-600 relative">
         {/* Close Button */}
         <button
           onClick={handleClose}
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            right: '1rem',
-            background: 'none',
-            border: 'none',
-            color: '#cccccc',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-            transition: 'color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#ffffff';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#cccccc';
-          }}
+          className="absolute top-4 right-4 bg-transparent border-none text-gray-300 text-2xl cursor-pointer p-2 rounded transition-colors duration-200 hover:text-white"
         >
           ×
         </button>
 
         {/* Title */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          marginBottom: '1.5rem',
-          paddingRight: '2rem'
-        }}>
-          <div style={{
-            backgroundColor: '#a78bfa',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid #8b5cf6'
-          }}>
-            <span style={{ fontSize: '1.25rem' }}>💡</span>
+        <div className="flex items-center gap-3 mb-6 pr-8">
+          <div className="bg-purple-400 rounded-full w-10 h-10 flex items-center justify-center border border-purple-500">
+            <span className="text-xl">💡</span>
           </div>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: '300',
-            color: '#ffffff',
-            margin: 0
-          }}>
+          <h2 className="text-2xl font-light text-white m-0">
             Hint
           </h2>
         </div>
 
         {/* Hint Content */}
-        <div style={{
-          backgroundColor: '#333333',
-          borderRadius: '0.5rem',
-          padding: '1.5rem',
-          border: '1px solid #555555',
-          marginBottom: '1.5rem'
-        }}>
+        <div className="bg-gray-700 rounded-lg p-6 border border-gray-500 mb-6">
           {hintRevealed ? (
-            <p style={{
-              fontSize: '1rem',
-              color: '#ffffff',
-              lineHeight: '1.6',
-              margin: 0
-            }}>
+            <p className="text-base text-white leading-relaxed m-0">
               {hint}
             </p>
           ) : (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '1rem'
-            }}>
-              <span style={{ fontSize: '1.5rem' }}>🔒</span>
-              <p style={{
-                fontSize: '1rem',
-                color: '#cccccc',
-                margin: 0,
-                fontStyle: 'italic'
-              }}>
+            <div className="flex items-center justify-center gap-2 p-4">
+              <span className="text-2xl">🔒</span>
+              <p className="text-base text-gray-300 m-0 italic">
                 Click "Show Hint" to reveal the hint
               </p>
             </div>
@@ -150,92 +69,34 @@ export default function HintModal({
         </div>
 
         {/* Warning Message */}
-        <div style={{
-          backgroundColor: '#333333',
-          borderRadius: '0.5rem',
-          padding: '1rem',
-          border: '1px solid #555555',
-          marginBottom: '1.5rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            marginBottom: '0.5rem'
-          }}>
-            <span style={{ fontSize: '1rem' }}>⚠️</span>
-            <span style={{
-              fontSize: '0.875rem',
-              color: '#fbbf24',
-              fontWeight: '500'
-            }}>
+        <div className="bg-gray-700 rounded-lg p-4 border border-gray-500 mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-base">⚠️</span>
+            <span className="text-sm text-yellow-400 font-medium">
               Note
             </span>
           </div>
-          <p style={{
-            fontSize: '0.8rem',
-            color: '#cccccc',
-            lineHeight: '1.4',
-            margin: 0
-          }}>
+          <p className="text-xs text-gray-300 leading-relaxed m-0">
             Using a hint will be recorded in your statistics. Take your time to think about the problem first!
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'flex-end'
-        }}>
+        <div className="flex gap-4 justify-end">
           <button
             onClick={handleClose}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              border: '1px solid #555555',
-              backgroundColor: 'transparent',
-              color: '#cccccc',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#333333';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#cccccc';
-            }}
+            className="px-6 py-3 rounded-md border border-gray-500 bg-transparent text-gray-300 text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-gray-700 hover:text-white"
           >
             Cancel
           </button>
           <button
             onClick={handleShowHint}
             disabled={disabled}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: disabled ? '#333333' : '#a78bfa',
-              color: disabled ? '#666666' : '#ffffff',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              if (!disabled) {
-                e.currentTarget.style.backgroundColor = '#8b5cf6';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!disabled) {
-                e.currentTarget.style.backgroundColor = '#a78bfa';
-              }
-            }}
+            className={`px-6 py-3 rounded-md border-none text-sm font-medium transition-all duration-200 ${
+              disabled 
+                ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
+                : 'bg-purple-400 text-white cursor-pointer hover:bg-purple-500'
+            }`}
           >
             Show Hint
           </button>

@@ -38,109 +38,38 @@ export default function SettingsModal({
   if (!isOpen) return null
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      padding: '1rem',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
-      <div style={{
-        backgroundColor: '#1a1a1a',
-        borderRadius: '0.75rem',
-        padding: 'clamp(1rem, 5vw, 2rem)',
-        maxWidth: 'clamp(300px, 95vw, 500px)',
-        width: '100%',
-        maxHeight: '90vh',
-        border: '1px solid #333333',
-        position: 'relative',
-        overflow: 'auto'
-      }}>
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-gray-800 rounded-xl p-4 md:p-8 max-w-sm md:max-w-lg w-full max-h-screen border border-gray-600 relative overflow-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            right: '1rem',
-            background: 'none',
-            border: 'none',
-            color: '#cccccc',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-            transition: 'color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#ffffff';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#cccccc';
-          }}
+          className="absolute top-4 right-4 bg-transparent border-none text-gray-300 text-2xl cursor-pointer p-2 rounded transition-colors duration-200 hover:text-white"
         >
           ×
         </button>
 
         {/* Title */}
-        <h2 style={{
-          fontSize: '1.5rem',
-          fontWeight: '300',
-          marginBottom: '1.5rem',
-          color: '#ffffff',
-          paddingRight: '2rem'
-        }}>
+        <h2 className="text-2xl font-light mb-6 text-white pr-8">
           Practice Settings
         </h2>
 
         {/* Settings Content */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(1rem, 4vw, 1.5rem)' }}>
+        <div className="flex flex-col gap-4 md:gap-6">
           {/* Difficulty Selection */}
           <div>
-            <label style={{
-              display: 'block',
-              fontSize: 'clamp(0.8rem, 3.5vw, 0.875rem)',
-              fontWeight: '500',
-              marginBottom: '0.75rem',
-              color: '#cccccc'
-            }}>
+            <label className="block text-sm font-medium mb-3 text-gray-300">
               Difficulty Level
             </label>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div className="flex gap-2 flex-wrap">
               {['easy', 'medium', 'hard'].map((level) => (
                 <button
                   key={level}
                   onClick={() => onDifficultyChange(level)}
-                  style={{
-                    flex: 1,
-                    minWidth: '80px',
-                    padding: 'clamp(0.6rem, 3vw, 0.75rem) clamp(0.8rem, 4vw, 1rem)',
-                    borderRadius: '6px',
-                    fontWeight: '500',
-                    fontSize: 'clamp(0.8rem, 3.5vw, 0.875rem)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    backgroundColor: difficulty === level ? '#ffffff' : '#333333',
-                    color: difficulty === level ? '#000000' : '#cccccc',
-                    border: `1px solid ${difficulty === level ? '#ffffff' : '#555555'}`
-                  }}
-                  onMouseEnter={(e) => {
-                    if (difficulty !== level) {
-                      e.currentTarget.style.backgroundColor = '#444444';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (difficulty !== level) {
-                      e.currentTarget.style.backgroundColor = '#333333';
-                    }
-                  }}
+                  className={`flex-1 min-w-20 px-3 py-2 md:px-4 md:py-3 rounded-md font-medium text-sm cursor-pointer transition-all duration-200 ${
+                    difficulty === level 
+                      ? 'bg-white text-black border border-white' 
+                      : 'bg-gray-700 text-gray-300 border border-gray-500 hover:bg-gray-600'
+                  }`}
                 >
                   {level.charAt(0).toUpperCase() + level.slice(1)}
                 </button>
@@ -150,35 +79,17 @@ export default function SettingsModal({
 
           {/* Topic Selection */}
           <div>
-            <label htmlFor="topic-select" style={{
-              display: 'block',
-              fontSize: 'clamp(0.8rem, 3.5vw, 0.875rem)',
-              fontWeight: '500',
-              marginBottom: '0.75rem',
-              color: '#cccccc'
-            }}>
+            <label htmlFor="topic-select" className="block text-sm font-medium mb-3 text-gray-300">
               Topic Focus
             </label>
             <select
               id="topic-select"
               value={topic || ''}
               onChange={(e) => onTopicChange(e.target.value || null)}
-              style={{
-                width: '100%',
-                padding: 'clamp(0.6rem, 3vw, 0.75rem) clamp(0.8rem, 4vw, 1rem)',
-                borderRadius: '6px',
-                border: '1px solid #555555',
-                backgroundColor: '#333333',
-                color: '#ffffff',
-                fontSize: 'clamp(0.8rem, 3.5vw, 0.875rem)',
-                cursor: 'pointer'
-              }}
+              className="w-full px-3 py-2 md:px-4 md:py-3 rounded-md border border-gray-500 bg-gray-700 text-white text-sm cursor-pointer"
             >
               {topics.map((t) => (
-                <option key={t.label} value={t.value || ''} style={{
-                  backgroundColor: '#333333',
-                  color: '#ffffff'
-                }}>
+                <option key={t.label} value={t.value || ''} className="bg-gray-700 text-white">
                   {t.label}
                 </option>
               ))}
@@ -187,62 +98,29 @@ export default function SettingsModal({
 
           {/* Timer Toggle */}
           <div>
-            <label style={{
-              display: 'block',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              marginBottom: '0.75rem',
-              color: '#cccccc'
-            }}>
+            <label className="block text-sm font-medium mb-3 text-gray-300">
               Timer
             </label>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              padding: '0.75rem 1rem',
-              backgroundColor: '#333333',
-              borderRadius: '6px',
-              border: '1px solid #555555'
-            }}>
+            <div className="flex items-center gap-4 p-3 bg-gray-700 rounded-md border border-gray-500">
               <button
                 onClick={() => onTimerToggle(!timerEnabled)}
-                style={{
-                  width: '48px',
-                  height: '24px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.2s ease',
-                  backgroundColor: timerEnabled ? '#4ade80' : '#555555',
-                  position: 'relative',
-                  padding: 0
-                }}
+                className={`w-12 h-6 rounded-full border-none cursor-pointer transition-colors duration-200 relative p-0 ${
+                  timerEnabled ? 'bg-green-400' : 'bg-gray-500'
+                }`}
               >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  position: 'absolute',
-                  top: '2px',
-                  left: timerEnabled ? '26px' : '2px',
-                  transition: 'left 0.2s ease'
-                }} />
+                <div 
+                  className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-all duration-200 ${
+                    timerEnabled ? 'left-6' : 'left-0.5'
+                  }`} 
+                />
               </button>
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontSize: '0.875rem',
-                  color: timerEnabled ? '#ffffff' : '#cccccc',
-                  fontWeight: '500'
-                }}>
+              <div className="flex-1">
+                <div className={`text-sm font-medium ${
+                  timerEnabled ? 'text-white' : 'text-gray-300'
+                }`}>
                   {timerEnabled ? 'Enabled' : 'Disabled'}
                 </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#888888',
-                  marginTop: '0.125rem'
-                }}>
+                <div className="text-xs text-gray-400 mt-0.5">
                   {timerEnabled
                     ? 'Easy: 30s • Medium: 1m • Hard: 2m'
                     : 'No time limit for questions'}
@@ -253,74 +131,24 @@ export default function SettingsModal({
         </div>
 
         {/* Info Text */}
-        <div style={{
-          marginTop: '1.5rem',
-          padding: '0.75rem',
-          backgroundColor: '#333333',
-          borderRadius: '6px',
-          border: '1px solid #555555'
-        }}>
-          <p style={{
-            fontSize: '0.8rem',
-            color: '#cccccc',
-            margin: 0,
-            lineHeight: '1.4'
-          }}>
-            <span style={{ fontWeight: '500', color: '#ffffff' }}>Tip:</span> Start with Easy problems to build confidence,
+        <div className="mt-6 p-3 bg-gray-700 rounded-md border border-gray-500">
+          <p className="text-xs text-gray-300 m-0 leading-relaxed">
+            <span className="font-medium text-white">Tip:</span> Start with Easy problems to build confidence,
             then progress to Medium and Hard. Choose a topic to focus on specific areas!
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          marginTop: '1.5rem',
-          justifyContent: 'flex-end'
-        }}>
+        <div className="flex gap-4 mt-6 justify-end">
           <button
             onClick={onClose}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              border: '1px solid #555555',
-              backgroundColor: 'transparent',
-              color: '#cccccc',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#333333';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#cccccc';
-            }}
+            className="px-6 py-3 rounded-md border border-gray-500 bg-transparent text-gray-300 text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-gray-700 hover:text-white"
           >
             Cancel
           </button>
           <button
             onClick={onClose}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#f0f0f0';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#ffffff';
-            }}
+            className="px-6 py-3 rounded-md border-none bg-white text-black text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-gray-100"
           >
             Save Settings
           </button>

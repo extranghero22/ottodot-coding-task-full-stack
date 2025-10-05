@@ -147,6 +147,7 @@ info is saved
 - Problems on History modal can be clicked for detailed view
 - Took a design insipiration on Kahoots!
 - Minimalist design as  i am a minimalist at heart
+- Also add topic choice for better focusing on some topics
 
 ## Additional Features (Optional)
 

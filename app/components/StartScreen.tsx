@@ -6,174 +6,67 @@ interface StartScreenProps {
 
 export default function StartScreen({ onStart, isLoading, onSettingsClick }: StartScreenProps) {
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      backgroundColor: '#000000',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
-      <div style={{ 
-        textAlign: 'center',
-        maxWidth: '600px',
-        color: 'white'
-      }}>
+    <div className="min-h-screen bg-black flex items-center justify-center p-8 font-sans">
+      <div className="text-center max-w-2xl text-white">
         {/* Simple Monochrome Icon */}
-        <div style={{ marginBottom: '3rem' }}>
-          <div style={{
-            display: 'inline-block',
-            backgroundColor: '#1a1a1a',
-            borderRadius: '50%',
-            padding: '2rem',
-            border: '1px solid #333333'
-          }}>
-            <span style={{ 
-              fontSize: '3rem',
-              filter: 'grayscale(100%) brightness(0.8)'
-            }}>🧮</span>
+        <div className="mb-12">
+          <div className="inline-block bg-gray-800 rounded-full p-8 border border-gray-600">
+            <span className="text-5xl grayscale brightness-75">🧮</span>
           </div>
         </div>
 
         {/* Clean Title */}
-        <h1 style={{
-          fontSize: 'clamp(2rem, 6vw, 3rem)',
-          fontWeight: '300',
-          marginBottom: '1rem',
-          lineHeight: '1.2',
-          color: '#ffffff',
-          padding: '0 1rem'
-        }}>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight text-white px-4">
           Ready to solve<br />
-          <span style={{ fontWeight: '600' }}>some math?</span>
+          <span className="font-semibold">some math?</span>
         </h1>
 
         {/* Simple Description */}
-        <p style={{
-          fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
-          color: '#cccccc',
-          marginBottom: '2rem',
-          lineHeight: '1.6',
-          maxWidth: '500px',
-          margin: '0 auto 2rem auto',
-          padding: '0 1rem'
-        }}>
+        <p className="text-sm md:text-base lg:text-lg text-gray-300 mb-8 leading-relaxed max-w-lg mx-auto px-4">
           Test your Primary 5 math skills with AI-generated problems that adapt to your learning pace
         </p>
 
         {/* Button Container */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: '2rem',
-          width: '100%',
-          padding: '0 1rem'
-        }}>
+        <div className="flex flex-col gap-4 justify-center items-center mb-8 w-full px-4">
           {/* Start Learning Button */}
-          <button
-            onClick={onStart}
-            disabled={isLoading}
-            style={{
-              backgroundColor: isLoading ? '#333333' : '#ffffff',
-              color: isLoading ? '#666666' : '#000000',
-              border: 'none',
-              padding: '1rem 2rem',
-              fontSize: 'clamp(1rem, 4vw, 1.1rem)',
-              fontWeight: '500',
-              borderRadius: '8px',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              width: '100%',
-              maxWidth: '300px',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = '#f0f0f0';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-              }
-            }}
-          >
+                  <button
+                    onClick={onStart}
+                    disabled={isLoading}
+                    className={`px-8 py-4 text-base md:text-lg font-medium rounded-lg transition-all duration-200 flex items-center gap-2 w-full max-w-xs justify-center ${
+                      isLoading 
+                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
+                        : 'bg-white text-black hover:bg-gray-100 cursor-pointer'
+                    }`}
+                  >
             {isLoading ? (
               <>
-                <div style={{
-                  width: '16px',
-                  height: '16px',
-                  border: '2px solid #666666',
-                  borderTop: '2px solid transparent',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite'
-                }}></div>
+                <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                 Loading...
               </>
             ) : (
               <>
                 Start Learning
-                <span style={{ fontSize: '1.2rem' }}>→</span>
+                <span className="text-xl">→</span>
               </>
             )}
           </button>
 
           {/* Settings Button */}
-          <button
-            onClick={onSettingsClick}
-            disabled={isLoading}
-            style={{
-              backgroundColor: isLoading ? '#333333' : 'gray',
-              color: isLoading ? '#666666' : 'white',
-              border: '1px solid #555555',
-              padding: '1rem 2rem',
-              fontSize: 'clamp(1rem, 4vw, 1.1rem)',
-              fontWeight: '500',
-              borderRadius: '8px',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              width: '100%',
-              maxWidth: '300px',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = '#333333';
-                e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.borderColor = '#666666';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#cccccc';
-                e.currentTarget.style.borderColor = '#555555';
-              }
-            }}
-          >
+                  <button
+                    onClick={onSettingsClick}
+                    disabled={isLoading}
+                    className={`px-8 py-4 text-base md:text-lg font-medium rounded-lg transition-all duration-200 flex items-center gap-2 w-full max-w-xs justify-center ${
+                      isLoading 
+                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer'
+                    }`}
+                  >
             ⚙️ Settings
           </button>
         </div>
 
         {/* Simple Feature List */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '1rem',
-          fontSize: '0.9rem',
-          color: '#888888'
-        }}>
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500">
           <span>⚡ AI-Powered</span>
           <span>🎓 Primary 5 Level</span>
           <span>💡 Instant Feedback</span>
@@ -181,21 +74,10 @@ export default function StartScreen({ onStart, isLoading, onSettingsClick }: Sta
         </div>
 
         {/* Subtle Footer */}
-        <div style={{
-          marginTop: '2rem',
-          fontSize: '0.8rem',
-          color: '#666666'
-        }}>
+        <div className="mt-8 text-xs text-gray-600">
           Ready to begin your math journey
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   )
 }

@@ -5,14 +5,11 @@
 /* Remove all borders and outlines */
 * {
   box-sizing: border-box;
-  outline: none !important;
-  border: none !important;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #000000 !important;
 }
 
 html {

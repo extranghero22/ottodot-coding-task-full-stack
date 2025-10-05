@@ -24,6 +24,9 @@ interface QuestionScreenProps {
   timeRemaining?: number
   totalTime?: number
   timerEnabled?: boolean
+  // Difficulty and topic props
+  difficulty?: string
+  topic?: string
 }
 
 export default function QuestionScreen({
@@ -45,120 +48,62 @@ export default function QuestionScreen({
   hint,
   timeRemaining = 60,
   totalTime = 60,
-  timerEnabled = false
+  timerEnabled = false,
+  difficulty,
+  topic
 }: QuestionScreenProps) {
   const answerVariants: ('red' | 'blue' | 'yellow' | 'green')[] = ['red', 'blue', 'yellow', 'green']
 
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      backgroundColor: '#000000',
-      display: 'flex',
-      flexDirection: 'column',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
+    <div className="min-h-screen bg-black flex flex-col font-sans">
       {/* Top Header - Question Display */}
-      <div style={{
-        backgroundColor: '#1a1a1a',
-        padding: '0.75rem 1rem',
-        borderBottom: '1px solid #333333'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '0.5rem',
-            flexWrap: 'wrap',
-            gap: '0.5rem'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <div style={{
-                backgroundColor: '#333333',
-                borderRadius: '50%',
-                width: 'clamp(28px, 6vw, 32px)',
-                height: 'clamp(28px, 6vw, 32px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid #555555'
-              }}>
-                <span style={{ 
-                  fontWeight: '900', 
-                  color: '#ffffff', 
-                  fontSize: 'clamp(0.8rem, 3vw, 1rem)' 
-                }}>
+      <div className="bg-gray-800 px-4 py-3 border-b border-gray-600">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <div className="bg-gray-600 rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center border border-gray-500">
+                <span className="font-black text-white text-sm md:text-base">
                   {questionNumber}
                 </span>
               </div>
-              <div style={{ 
-                color: '#cccccc', 
-                fontSize: 'clamp(0.7rem, 3vw, 0.75rem)', 
-                fontWeight: '600' 
-              }}>
+              <div className="text-gray-300 text-xs md:text-sm font-semibold">
                 Question {questionNumber}
               </div>
             </div>
             
             {/* Header Buttons */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.25rem',
-              flexWrap: 'wrap'
-            }}>
+            <div className="flex items-center gap-1 flex-wrap">
               {/* Circular Timer - Only show if enabled */}
               {timerEnabled && (
-                <div style={{
-                  position: 'relative',
-                  width: 'clamp(32px, 8vw, 40px)',
-                  height: 'clamp(32px, 8vw, 40px)',
-                  borderRadius: '50%',
-                  backgroundColor: '#333333',
-                  border: '2px solid #555555',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
+                <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-700 border-2 border-gray-500 flex items-center justify-center">
                   {/* Timer Circle Background */}
                   <svg
-                    width="clamp(28, 6vw, 36)"
-                    height="clamp(28, 6vw, 36)"
-                    style={{
-                      position: 'absolute',
-                      top: '2px',
-                      left: '2px',
-                      transform: 'rotate(-90deg)'
-                    }}
+                    className="absolute top-0.5 left-0.5 w-7 h-7 md:w-9 md:h-9 -rotate-90"
+                    viewBox="0 0 36 36"
                   >
                     <circle
-                      cx="clamp(14, 3vw, 18)"
-                      cy="clamp(14, 3vw, 18)"
-                      r="clamp(12, 2.5vw, 16)"
+                      cx="18"
+                      cy="18"
+                      r="16"
                       fill="none"
                       stroke="#555555"
                       strokeWidth="2"
                     />
                     <circle
-                      cx="clamp(14, 3vw, 18)"
-                      cy="clamp(14, 3vw, 18)"
-                      r="clamp(12, 2.5vw, 16)"
+                      cx="18"
+                      cy="18"
+                      r="16"
                       fill="none"
                       stroke={timeRemaining <= 10 ? '#ef4444' : timeRemaining <= 30 ? '#fbbf24' : '#22c55e'}
                       strokeWidth="2"
                       strokeLinecap="round"
-                      strokeDasharray={`${2 * Math.PI * (timeRemaining <= 10 ? 12 : timeRemaining <= 30 ? 12 : 16)}`}
-                      strokeDashoffset={`${2 * Math.PI * (timeRemaining <= 10 ? 12 : timeRemaining <= 30 ? 12 : 16) * (1 - timeRemaining / totalTime)}`}
-                      style={{ transition: 'stroke-dashoffset 1s linear' }}
+                      strokeDasharray={`${2 * Math.PI * 16}`}
+                      strokeDashoffset={`${2 * Math.PI * 16 * (1 - timeRemaining / totalTime)}`}
+                      className="transition-all duration-1000 ease-linear"
                     />
                   </svg>
                   {/* Timer Text */}
-                  <span style={{
-                    fontSize: 'clamp(0.6rem, 2.5vw, 0.75rem)',
-                    fontWeight: '600',
-                    color: '#ffffff',
-                    zIndex: 1
-                  }}>
+                  <span className="text-xs font-semibold text-white z-10">
                     {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
                   </span>
                 </div>
@@ -167,30 +112,7 @@ export default function QuestionScreen({
               {/* Metrics Button */}
               <button
                 onClick={onMetricsClick}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: '#cccccc',
-                  border: '1px solid #555555',
-                  padding: '0.4rem 0.6rem',
-                  fontSize: 'clamp(0.6rem, 2.5vw, 0.75rem)',
-                  fontWeight: '500',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.2rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#333333';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.borderColor = '#666666';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#cccccc';
-                  e.currentTarget.style.borderColor = '#555555';
-                }}
+                className="bg-gray-800 text-gray-300 border border-gray-600 px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-all duration-200 flex items-center gap-1 hover:bg-gray-700 hover:text-white hover:border-gray-500"
               >
                 📊 Metrics
               </button>
@@ -198,30 +120,7 @@ export default function QuestionScreen({
               {/* History Button */}
               <button
                 onClick={onHistoryClick}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: '#cccccc',
-                  border: '1px solid #555555',
-                  padding: '0.4rem 0.6rem',
-                  fontSize: 'clamp(0.6rem, 2.5vw, 0.75rem)',
-                  fontWeight: '500',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.2rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#333333';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.borderColor = '#666666';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#cccccc';
-                  e.currentTarget.style.borderColor = '#555555';
-                }}
+                className="bg-gray-800 text-gray-300 border border-gray-600 px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-all duration-200 flex items-center gap-1 hover:bg-gray-700 hover:text-white hover:border-gray-500"
               >
                 📚 History
               </button>
@@ -230,128 +129,88 @@ export default function QuestionScreen({
               {hint && (
                 <button
                   onClick={onHintClick}
-                  style={{
-                    backgroundColor: 'transparent',
-                    color: '#cccccc',
-                    border: '1px solid #555555',
-                    padding: '0.4rem 0.6rem',
-                    fontSize: 'clamp(0.6rem, 2.5vw, 0.75rem)',
-                    fontWeight: '500',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.2rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#333333';
-                    e.currentTarget.style.color = '#ffffff';
-                    e.currentTarget.style.borderColor = '#666666';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#cccccc';
-                    e.currentTarget.style.borderColor = '#555555';
-                  }}
+                  className="bg-gray-800 text-gray-300 border border-gray-600 px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-all duration-200 flex items-center gap-1 hover:bg-gray-700 hover:text-white hover:border-gray-500"
                 >
                   💡 Hint
                 </button>
               )}
 
               {/* Answer Count Badge */}
-              <div style={{
-                backgroundColor: '#333333',
-                borderRadius: '9999px',
-                padding: '0.2rem 0.6rem',
-                border: '1px solid #555555'
-              }}>
-                <span style={{ 
-                  color: '#ffffff', 
-                  fontWeight: '700', 
-                  fontSize: 'clamp(0.6rem, 2.5vw, 0.75rem)' 
-                }}>
-                {answerCount} {answerCount === 1 ? 'Answer' : 'Answers'}
-              </span>
+              <div className="bg-gray-700 rounded-full px-2 py-1 border border-gray-500">
+                <span className="text-white font-bold text-xs">
+                  {answerCount} {answerCount === 1 ? 'Answer' : 'Answers'}
+                </span>
               </div>
+
+              {/* Difficulty and Topic Badges */}
+              {difficulty && (
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  difficulty === 'easy'
+                    ? 'bg-green-600 text-green-100'
+                    : difficulty === 'medium'
+                    ? 'bg-yellow-600 text-yellow-100'
+                    : 'bg-red-600 text-red-100'
+                }`}>
+                  {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                </span>
+              )}
+              {topic && (
+                <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-600 text-blue-100">
+                  {topic}
+                </span>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '0.75rem',
-        backgroundColor: '#000000',
-        minHeight: 0
-      }}>
-        {showResult ? (
-          /* Result Content - Compact */
-          <div style={{ 
-            textAlign: 'center', 
-            maxWidth: 'clamp(300px, 90vw, 400px)', 
-            color: 'white',
-            width: '100%',
-            padding: '0 0.5rem'
-          }}>
-            {/* Status Icon */}
-            <div style={{ marginBottom: '0.75rem' }}>
-              <div style={{
-                display: 'inline-block',
-                backgroundColor: '#1a1a1a',
-                borderRadius: '50%',
-                padding: '0.75rem',
-                border: '1px solid #333333'
-              }}>
-                <span style={{ 
-                  fontSize: '1.5rem',
-                  filter: 'grayscale(100%) brightness(0.8)'
-                }}>
-                  {isCorrect ? '✓' : '✗'}
-            </span>
+      <div className="flex-1 flex flex-col items-center justify-center p-3 bg-black min-h-0">
+        {isLoading && !showResult ? (
+          /* Loading Content - Similar to Result Content */
+          <div className="text-center max-w-sm md:max-w-md lg:max-w-lg text-white w-full px-2">
+            {/* Loading Spinner */}
+            <div className="mb-3">
+              <div className="inline-block bg-gray-800 rounded-full p-3 border border-gray-600">
+                <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            </div>
+
+            {/* Loading Heading */}
+            <h2 className="text-2xl font-light mb-2 leading-tight text-white">
+              Generating Question...
+            </h2>
+
+            {/* Loading Subheading */}
+            <p className="text-sm text-gray-300 mb-3 font-normal">
+              Please wait while we prepare your next math problem
+            </p>
           </div>
-        </div>
+        ) : showResult ? (
+          /* Result Content - Compact */
+          <div className="text-center max-w-sm md:max-w-md lg:max-w-lg text-white w-full px-2">
+            {/* Status Icon */}
+            <div className="mb-3">
+              <div className="inline-block bg-gray-800 rounded-full p-3 border border-gray-600">
+                <span className="text-2xl grayscale brightness-75">
+                  {isCorrect ? '✓' : '✗'}
+                </span>
+              </div>
+            </div>
 
             {/* Result Heading */}
-            <h2 style={{
-              fontSize: '1.5rem',
-              fontWeight: '300',
-              marginBottom: '0.5rem',
-              lineHeight: '1.2',
-              color: '#ffffff'
-            }}>
+            <h2 className="text-2xl font-light mb-2 leading-tight text-white">
               {isCorrect ? 'Correct!' : 'Not quite!'}
             </h2>
 
             {/* Subheading */}
-            <p style={{
-              fontSize: '0.9rem',
-              color: '#cccccc',
-              marginBottom: '0.75rem',
-              fontWeight: '400'
-            }}>
+            <p className="text-sm text-gray-300 mb-3 font-normal">
               {isCorrect ? 'You got it right!' : 'Keep trying, you can do it!'}
             </p>
 
             {/* Feedback */}
-            <div style={{
-              backgroundColor: '#1a1a1a',
-              borderRadius: '0.5rem',
-              padding: '0.75rem',
-              marginBottom: '1rem',
-              border: '1px solid #333333'
-            }}>
-              <p style={{
-                fontSize: '0.8rem',
-                color: '#ffffff',
-                lineHeight: '1.4',
-                margin: 0
-              }}>
+            <div className="bg-gray-800 rounded-lg p-3 mb-4 border border-gray-600">
+              <p className="text-xs text-white leading-relaxed m-0">
                 {feedback}
               </p>
             </div>
@@ -360,89 +219,37 @@ export default function QuestionScreen({
             <button
               onClick={onNext}
               disabled={isLoading}
-              style={{
-                backgroundColor: isLoading ? '#333333' : '#ffffff',
-                color: isLoading ? '#666666' : '#000000',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                fontSize: '0.9rem',
-                fontWeight: '500',
-                borderRadius: '6px',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                margin: '0 auto'
-              }}
-              onMouseEnter={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.backgroundColor = '#f0f0f0';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                }
-              }}
+              className={`px-6 py-3 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2 mx-auto ${
+                isLoading 
+                  ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
+                  : 'bg-gray-800 text-white hover:bg-gray-700 cursor-pointer border border-gray-600'
+              }`}
             >
               {isLoading ? (
                 <>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    border: '2px solid #666666',
-                    borderTop: '2px solid transparent',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                  }}></div>
+                  <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                   Loading...
                 </>
               ) : (
                 <>
                   Next Question
-                  <span style={{ fontSize: '0.9rem' }}>→</span>
+                  <span className="text-sm">→</span>
                 </>
               )}
             </button>
           </div>
         ) : (
           /* Question Content - Expanded to fill space */
-          <div style={{ 
-            width: '100%', 
-            maxWidth: 'clamp(300px, 95vw, 800px)', 
-            textAlign: 'center',
-            color: 'white',
-            padding: '0 0.5rem'
-          }}>
+          <div className="w-full max-w-sm md:max-w-md lg:max-w-2xl text-center text-white px-2">
             {/* Question Text - Optimized for no scroll */}
-            <div style={{
-              backgroundColor: '#1a1a1a',
-              borderRadius: '0.5rem',
-              padding: 'clamp(0.75rem, 3vw, 1rem)',
-              marginBottom: 'clamp(0.75rem, 3vw, 1rem)',
-              border: '1px solid #333333'
-            }}>
-              <h2 style={{
-                fontSize: 'clamp(1rem, 4vw, 1.25rem)',
-                fontWeight: '300',
-                color: '#ffffff',
-                lineHeight: '1.3',
-                margin: 0
-              }}>
+            <div className="bg-gray-800 rounded-lg p-3 md:p-4 mb-3 md:mb-4 border border-gray-600">
+              <h2 className="text-base md:text-lg lg:text-xl font-light text-white leading-relaxed m-0">
                 {problemText}
               </h2>
-      </div>
+            </div>
 
             {/* Answer Buttons - Compact layout */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 'clamp(0.5rem, 2vw, 0.75rem)',
-              rowGap: 'clamp(0.5rem, 2vw, 0.75rem)',
-              maxWidth: 'clamp(280px, 80vw, 500px)',
-              margin: '0 auto'
-            }}>
+            <div className="grid grid-cols-2 gap-2 md:gap-3 max-w-xs md:max-w-sm lg:max-w-md mx-auto">
             {options.map((option, index) => (
               <AnswerButton
                 key={index}
@@ -463,12 +270,6 @@ export default function QuestionScreen({
       </div>
 
 
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   )
 }

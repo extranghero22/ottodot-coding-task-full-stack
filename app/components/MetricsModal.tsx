@@ -22,169 +22,59 @@ export default function MetricsModal({
   const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      padding: '1rem',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
-      <div style={{
-        backgroundColor: '#1a1a1a',
-        borderRadius: '0.75rem',
-        padding: '2rem',
-        maxWidth: '600px',
-        width: '100%',
-        border: '1px solid #333333',
-        position: 'relative'
-      }}>
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-gray-800 rounded-xl p-6 md:p-8 max-w-lg w-full border border-gray-600 relative">
         {/* Close Button */}
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            right: '1rem',
-            background: 'none',
-            border: 'none',
-            color: '#cccccc',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-            transition: 'color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#ffffff';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#cccccc';
-          }}
+          className="absolute top-4 right-4 bg-transparent border-none text-gray-300 text-2xl cursor-pointer p-2 rounded transition-colors duration-200 hover:text-white"
         >
           ×
         </button>
 
         {/* Title */}
-        <h2 style={{
-          fontSize: '1.5rem',
-          fontWeight: '300',
-          marginBottom: '1.5rem',
-          color: '#ffffff',
-          paddingRight: '2rem'
-        }}>
+        <h2 className="text-2xl font-light mb-6 text-white pr-8">
           Your Progress
         </h2>
 
         {/* Metrics Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '1rem',
-          marginBottom: '1.5rem'
-        }}>
+        <div className="grid grid-cols-2 gap-4 mb-6">
           {/* Total Questions */}
-          <div style={{
-            backgroundColor: '#333333',
-            borderRadius: '0.5rem',
-            padding: '1.5rem',
-            border: '1px solid #555555',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#ffffff',
-              marginBottom: '0.5rem'
-            }}>
+          <div className="bg-gray-700 rounded-lg p-6 border border-gray-500 text-center">
+            <div className="text-3xl font-bold text-white mb-2">
               {totalQuestions}
             </div>
-            <div style={{
-              fontSize: '0.875rem',
-              color: '#cccccc',
-              fontWeight: '500'
-            }}>
+            <div className="text-sm text-gray-300 font-medium">
               Questions
             </div>
           </div>
 
           {/* Correct Answers */}
-          <div style={{
-            backgroundColor: '#333333',
-            borderRadius: '0.5rem',
-            padding: '1.5rem',
-            border: '1px solid #555555',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#4ade80',
-              marginBottom: '0.5rem'
-            }}>
+          <div className="bg-gray-700 rounded-lg p-6 border border-gray-500 text-center">
+            <div className="text-3xl font-bold text-green-400 mb-2">
               {correctAnswers}
             </div>
-            <div style={{
-              fontSize: '0.875rem',
-              color: '#cccccc',
-              fontWeight: '500'
-            }}>
+            <div className="text-sm text-gray-300 font-medium">
               Correct
             </div>
           </div>
 
           {/* Accuracy */}
-          <div style={{
-            backgroundColor: '#333333',
-            borderRadius: '0.5rem',
-            padding: '1.5rem',
-            border: '1px solid #555555',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#ffffff',
-              marginBottom: '0.5rem'
-            }}>
+          <div className="bg-gray-700 rounded-lg p-6 border border-gray-500 text-center">
+            <div className="text-3xl font-bold text-white mb-2">
               {accuracy}%
             </div>
-            <div style={{
-              fontSize: '0.875rem',
-              color: '#cccccc',
-              fontWeight: '500'
-            }}>
+            <div className="text-sm text-gray-300 font-medium">
               Accuracy
             </div>
           </div>
 
           {/* Hints Used */}
-          <div style={{
-            backgroundColor: '#333333',
-            borderRadius: '0.5rem',
-            padding: '1.5rem',
-            border: '1px solid #555555',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#a78bfa',
-              marginBottom: '0.5rem'
-            }}>
+          <div className="bg-gray-700 rounded-lg p-6 border border-gray-500 text-center">
+            <div className="text-3xl font-bold text-purple-400 mb-2">
               {hintsUsed}
             </div>
-            <div style={{
-              fontSize: '0.875rem',
-              color: '#cccccc',
-              fontWeight: '500'
-            }}>
+            <div className="text-sm text-gray-300 font-medium">
               Hints Used
             </div>
           </div>
@@ -192,70 +82,29 @@ export default function MetricsModal({
 
         {/* Progress Bar */}
         {totalQuestions > 0 && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '0.5rem'
-            }}>
-              <span style={{
-                fontSize: '0.875rem',
-                color: '#cccccc',
-                fontWeight: '500'
-              }}>
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-300 font-medium">
                 Overall Progress
               </span>
-              <span style={{
-                fontSize: '0.875rem',
-                color: '#ffffff',
-                fontWeight: '600'
-              }}>
+              <span className="text-sm text-white font-semibold">
                 {accuracy}%
               </span>
             </div>
-            <div style={{
-              width: '100%',
-              height: '8px',
-              backgroundColor: '#333333',
-              borderRadius: '4px',
-              overflow: 'hidden',
-              border: '1px solid #555555'
-            }}>
-              <div style={{
-                width: `${accuracy}%`,
-                height: '100%',
-                backgroundColor: '#4ade80',
-                transition: 'width 0.3s ease'
-              }}></div>
+            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden border border-gray-500">
+              <div 
+                className="h-full bg-green-400 transition-all duration-300 ease-out"
+                style={{ width: `${accuracy}%` }}
+              ></div>
             </div>
           </div>
         )}
 
         {/* Action Button */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end'
-        }}>
+        <div className="flex justify-end">
           <button
             onClick={onClose}
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#f0f0f0';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#ffffff';
-            }}
+            className="px-6 py-3 rounded-md border-none bg-white text-black text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-gray-100"
           >
             Close
           </button>

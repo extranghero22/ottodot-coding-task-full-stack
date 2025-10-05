@@ -39,88 +39,34 @@ export default function AnswerButton({
 }: AnswerButtonProps) {
   const config = buttonConfig[variant]
 
-  // Determine button colors based on state
-  const getButtonColors = () => {
+  // Determine button classes based on state
+  const getButtonClasses = () => {
+    const baseClasses = 'border-2 rounded-md px-3 py-2 md:px-4 md:py-3 text-sm md:text-base font-medium cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 md:gap-3 font-sans min-h-11 md:min-h-12 w-full text-center'
+    
     if (showFeedback && isSelected) {
-      return {
-        backgroundColor: isCorrect ? '#22c55e' : '#ef4444', // green for correct, red for wrong
-        color: '#ffffff',
-        borderColor: isCorrect ? '#16a34a' : '#dc2626'
-      }
+      return `${baseClasses} ${isCorrect ? 'bg-green-500 text-white border-green-600' : 'bg-red-500 text-white border-red-600'}`
     }
     if (showFeedback && isCorrect) {
-      return {
-        backgroundColor: '#22c55e', // green for correct answer
-        color: '#ffffff',
-        borderColor: '#16a34a'
-      }
+      return `${baseClasses} bg-green-500 text-white border-green-600`
     }
     if (isSelected) {
-      return {
-        backgroundColor: '#3b82f6', // blue for selected
-        color: '#ffffff',
-        borderColor: '#2563eb'
-      }
+      return `${baseClasses} bg-blue-500 text-white border-blue-600`
     }
-    return {
-      backgroundColor: disabled ? '#333333' : '#ffffff',
-      color: disabled ? '#666666' : '#000000',
-      borderColor: '#333333'
-    }
+    return `${baseClasses} ${disabled ? 'bg-gray-700 text-gray-400 border-gray-600 opacity-50 cursor-not-allowed' : 'bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:-translate-y-0.5'}`
   }
 
-  const colors = getButtonColors()
+  const buttonClasses = getButtonClasses()
 
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      style={{
-        backgroundColor: colors.backgroundColor,
-        color: colors.color,
-        border: `2px solid ${colors.borderColor}`,
-        borderRadius: '6px',
-        padding: 'clamp(0.6rem, 3vw, 0.75rem) clamp(0.8rem, 4vw, 1rem)',
-        fontSize: 'clamp(0.8rem, 3.5vw, 0.9rem)',
-        fontWeight: '500',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'all 0.2s ease',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 'clamp(0.3rem, 2vw, 0.5rem)',
-        opacity: disabled ? 0.5 : 1,
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        minHeight: 'clamp(45px, 12vw, 50px)',
-        width: '100%',
-        textAlign: 'center'
-      }}
-      onMouseEnter={(e) => {
-        if (!disabled && !showFeedback) {
-          e.currentTarget.style.backgroundColor = '#f0f0f0';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!disabled && !showFeedback) {
-          e.currentTarget.style.backgroundColor = colors.backgroundColor;
-          e.currentTarget.style.transform = 'translateY(0)';
-        }
-      }}
+      className={buttonClasses}
     >
-      <span style={{ 
-        fontSize: 'clamp(1.2rem, 5vw, 1.5rem)',
-        fontWeight: 'bold',
-        minWidth: 'clamp(1.5rem, 6vw, 2rem)',
-        textAlign: 'center'
-      }}>
+      <span className="text-lg md:text-xl font-bold min-w-6 md:min-w-8 text-center">
         {letter}
       </span>
-      <span style={{ 
-        textAlign: 'left', 
-        flex: 1,
-        fontSize: 'clamp(0.8rem, 3.5vw, 0.9rem)'
-      }}>
+      <span className="text-left flex-1 text-sm md:text-base">
         {text}
       </span>
     </button>

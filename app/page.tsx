@@ -23,6 +23,7 @@ export default function Home() {
   const [problem, setProblem] = useState<MathProblem | null>(null)
   const [feedback, setFeedback] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isGeneratingNext, setIsGeneratingNext] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
   const [questionNumber, setQuestionNumber] = useState(1)
@@ -131,6 +132,7 @@ export default function Home() {
       setIsCorrect(false)
     } finally {
       setIsLoading(false)
+      setIsGeneratingNext(false) // Clear next question loading state
     }
   }
 
@@ -184,6 +186,7 @@ export default function Home() {
     setQuestionNumber(prev => prev + 1)
     setSelectedAnswer(null)
     setHintUsedCurrentQuestion(false)
+    setIsGeneratingNext(true) // Set loading state for next question generation
     generateProblem()
   }
 
@@ -211,10 +214,10 @@ export default function Home() {
   // Show loading spinner when transitioning between questions
   if (isLoading && !problem) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <LoadingSpinner size="large" color="#4f46e5" />
-          <p className="mt-4 text-gray-600 font-medium">Generating your next question...</p>
+          <LoadingSpinner size="large" color="#ffffff" />
+          <p className="mt-4 text-white font-medium">Generating your next question...</p>
         </div>
       </div>
     )
@@ -223,8 +226,8 @@ export default function Home() {
   // Render appropriate screen based on state
   if (!problem && !feedback) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="h-full w-full">
+        <div>
           {/* Score Card - Only show if user has attempted problems */}
           {(totalCorrect + totalIncorrect) > 0 && (
             <ScoreCard
@@ -266,8 +269,7 @@ export default function Home() {
 
   if (problem) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto relative">
+      <div className="min-h-screen">
           {/* Loading overlay when submitting answer */}
           {isLoading && feedback && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-lg">
@@ -285,7 +287,7 @@ export default function Home() {
             problemText={problem.problem_text}
             options={problem.options}
             onAnswer={submitAnswer}
-            isLoading={isLoading}
+            isLoading={isGeneratingNext}
             showResult={!!feedback}
             isCorrect={isCorrect}
             feedback={feedback}
@@ -299,27 +301,9 @@ export default function Home() {
             timeRemaining={timeRemaining}
             totalTime={problem.difficulty === 'easy' ? 60 : problem.difficulty === 'medium' ? 90 : 120}
             timerEnabled={timerEnabled}
+            difficulty={problem.difficulty}
+            topic={problem.topic}
           />
-
-          {/* Topic and Difficulty Display */}
-          <div className="mt-4 flex gap-2 justify-center flex-wrap">
-            {problem.difficulty && (
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                problem.difficulty === 'easy'
-                  ? 'bg-green-100 text-green-800'
-                  : problem.difficulty === 'medium'
-                  ? 'bg-yellow-100 text-yellow-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
-              </span>
-            )}
-            {problem.topic && (
-              <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {problem.topic}
-              </span>
-            )}
-          </div>
 
           {/* History Modal */}
           <HistoryModal
@@ -345,7 +329,6 @@ export default function Home() {
             onHintUsed={handleHintUsed}
             disabled={isLoading || hintUsedCurrentQuestion}
           />
-        </div>
       </div>
     )
   }
